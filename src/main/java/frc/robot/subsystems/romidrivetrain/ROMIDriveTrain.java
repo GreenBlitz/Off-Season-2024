@@ -5,6 +5,7 @@ package frc.robot.subsystems.romidrivetrain;
 
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
@@ -28,7 +29,7 @@ public class ROMIDriveTrain extends SubsystemBase {
     private final Encoder leftEncoder = new Encoder(4, 5);
     private final Encoder rightEncoder = new Encoder(6, 7);
 
-    private Measure<Distance> rightEncoderDistance,leftEncoderDistance;
+    private MutableMeasure<Distance> rightEncoderDistance,leftEncoderDistance;
 
     // Set up the differential drive controller
     private final DifferentialDrive differentialDriveController =
@@ -55,11 +56,11 @@ public class ROMIDriveTrain extends SubsystemBase {
     }
 
     public Measure<Distance> getLeftDistance() {
-        return Inches.of(leftEncoder.getDistance());
+        return leftEncoderDistance.mut_replace(leftEncoder.getDistance(),Inches);
     }
 
     public Measure<Distance> getRightDistance() {
-        return Inches.of(rightEncoder.getDistance());
+        return rightEncoderDistance.mut_replace(rightEncoder.getDistance(), Inches);
     }
 
 
