@@ -1,5 +1,6 @@
 package frc.robot;
 
+import frc.robot.commands.ROMIController;
 import frc.robot.constants.Ports;
 import frc.utils.joysticks.SmartJoystick;
 
@@ -13,11 +14,13 @@ public class JoysticksBindings {
 
     private static final SmartJoystick FOURTH_JOYSTICK = new SmartJoystick(Ports.JoystickDriverStationPorts.FOURTH);
 
-    public static void configureBindings() {
+    public static void configureBindings(RobotContainer robotContainer) {
         mainJoystickButtons();
         secondJoystickButtons();
         thirdJoystickButtons();
         fourthJoystickButtons();
+
+        robotContainer.romiDriveTrain.setDefaultCommand(new ROMIController(MAIN_JOYSTICK,robotContainer.romiDriveTrain));
     }
 
     private static void mainJoystickButtons() {

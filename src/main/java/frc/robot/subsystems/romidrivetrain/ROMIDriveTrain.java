@@ -1,7 +1,4 @@
 package frc.robot.subsystems.romidrivetrain;
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
 
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
@@ -9,15 +6,11 @@ import edu.wpi.first.units.MutableMeasure;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.utils.GBSubsystem;
 
-import static edu.wpi.first.units.Units.Inch;
 import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.Meter;
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.Radians;
 
-public class ROMIDriveTrain extends SubsystemBase {
+public class ROMIDriveTrain extends GBSubsystem {
 
     // The Romi has the left and right motors set to
     // PWM channels 0 and 1 respectively
