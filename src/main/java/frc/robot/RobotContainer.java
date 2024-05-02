@@ -7,9 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -19,7 +17,6 @@ import frc.robot.subsystems.ExampleSubsystem;
  */
 public class RobotContainer {
 
-    private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -41,7 +38,6 @@ public class RobotContainer {
     private void configureBindings() {
         JoysticksBindings.configureBindings();
 
-        new Trigger(m_exampleSubsystem::exampleCondition).onTrue(new ExampleCommand(m_exampleSubsystem));
     }
 
     /**
@@ -49,9 +45,6 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
-    public Command getAutonomousCommand() {
-        // An example command will be run in autonomous
-        return Autos.exampleAuto(m_exampleSubsystem);
-    }
+
 
 }
