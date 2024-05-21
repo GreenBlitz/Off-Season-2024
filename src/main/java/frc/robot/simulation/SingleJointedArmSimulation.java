@@ -3,21 +3,14 @@ package frc.robot.simulation;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
-import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.utils.roborioutils.RoborioUtils;
 
-public class SingleJointedArmSimulation extends MotorSimulation {
+public class SingleJointedArmSimulation extends MotorSimulation implements Mechanism2dUser {
 
     private final SingleJointedArmSim armSimulation;
 
-    private final Mechanism2d mechanism2d;
-
-    private final MechanismRoot2d root2d;
-
-    private final MechanismLigament2d arm2d;
+    private final MechanismLigament2d armLigament2d;
 
     public SingleJointedArmSimulation(DCMotor gearbox, double gearRatio, double armLengthMeters, double armMassKilograms,
             Rotation2d minimumAngle, Rotation2d maximumAngle, Rotation2d startingAngle, boolean simulateGravity) {
@@ -31,10 +24,7 @@ public class SingleJointedArmSimulation extends MotorSimulation {
                 simulateGravity,
                 startingAngle.getRadians()
         );
-        mechanism2d = new Mechanism2d(2 * armLengthMeters, armLengthMeters);
-        root2d = mechanism2d.getRoot("Pivot", armLengthMeters, 0);
-        arm2d = root2d.append(new MechanismLigament2d("Arm", armLengthMeters, startingAngle.getDegrees()));
-        SmartDashboard.putData("ArmMechanism2d", mechanism2d);
+        armLigament2d = new MechanismLigament2d("Arm", armLengthMeters, startingAngle.getDegrees());
     }
 
     @Override
@@ -60,7 +50,22 @@ public class SingleJointedArmSimulation extends MotorSimulation {
     @Override
     protected void updateMotor() {
         armSimulation.update(RoborioUtils.getCurrentRoborioCycleTime());
-        arm2d.setAngle(getPosition());
+        armLigament2d.setAngle(getPosition());
+    }
+
+    @Override
+    public MechanismLigament2d getLigament() {
+        return armLigament2d;
+    }
+
+    @Override
+    public MechanismLigament2d append(Mechanism2dUser mechanism2dUser) {
+        return append(mechanism2dUser.getLigament());
+    }
+
+    @Override
+    public MechanismLigament2d append(MechanismLigament2d ligament) {
+        return armLigament2d.append(ligament);
     }
 
 }
