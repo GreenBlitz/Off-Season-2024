@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import frc.utils.roborioutils.RoborioUtils;
 
-public class SingleJointedArmSimulation extends MotorSimulation implements Mechanism2dUser {
+public class SingleJointedArmSimulation extends MotorSimulation implements MechanismUser2d {
 
     private final SingleJointedArmSim armSimulation;
 
@@ -59,8 +59,8 @@ public class SingleJointedArmSimulation extends MotorSimulation implements Mecha
     }
 
     @Override
-    public MechanismLigament2d append(Mechanism2dUser mechanism2dUser) {
-        return append(mechanism2dUser.getLigament());
+    public MechanismLigament2d append(MechanismUser2d mechanismUser2d) {
+        return append(mechanismUser2d.getLigament());
     }
 
     @Override
