@@ -4,10 +4,14 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.simulation.ElevatorSimulation;
+import frc.robot.simulation.SingleJointedArmSimulation;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -16,6 +20,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+
+    public static final SingleJointedArmSimulation ARM = new SingleJointedArmSimulation(new DCMotor(1,1,1,1,1,1), 1,1,1,
+            Rotation2d.fromDegrees(45), Rotation2d.fromDegrees(135), Rotation2d.fromDegrees(90), false);
+    public static final ElevatorSimulation ELEVATOR = new ElevatorSimulation(new DCMotor(1,1,1,1,1,1),1,1,1,
+            0.01, 1,0.9,false);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
