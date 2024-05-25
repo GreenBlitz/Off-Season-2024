@@ -13,15 +13,38 @@ public class MechanismInstance2d {
 
     private MechanismLigament2d lastLigament = null;
 
-    public MechanismInstance2d(String name, double mechanismWidth, double mechanismHeight, double rootX, double rootY, MechanismUser2d... users) {
-        mechanism2d = new Mechanism2d(mechanismWidth, mechanismHeight);
-        root = mechanism2d.getRoot(name+"Root", rootX, rootY);
-        for (MechanismUser2d user : users) {
-            if (lastLigament == null)
-                lastLigament = root.append(user.getLigament());
-            else
-                lastLigament = lastLigament.append(user.getLigament());
+    public static MechanismLigament2d[] convertToLigaments(MechanismUser2d... users) {
+        MechanismLigament2d[] ligaments = new MechanismLigament2d[users.length];
+        for (int i = 0; i < users.length; i++) {
+            ligaments[i] = users[i].getLigament();
         }
+        return ligaments;
+    }
+
+    public MechanismInstance2d(String name, double mechanismWidth, double mechanismHeight, double rootX, double rootY, MechanismUser2d... users) {
+        this(name, mechanismWidth, mechanismHeight, rootX, rootY, convertToLigaments(users));
+    }
+
+    public MechanismInstance2d(String name, double mechanismWidth, double mechanismHeight, double rootX, double rootY, MechanismLigament2d... ligaments) {
+        mechanism2d = new Mechanism2d(mechanismWidth, mechanismHeight);
+        root = mechanism2d.getRoot(name + "Root", rootX, rootY);
+        append(ligaments);
         SmartDashboard.putData(name, mechanism2d);
     }
+
+    public void append(MechanismUser2d... users) {
+        append(convertToLigaments(users));
+    }
+
+    public void append(MechanismLigament2d... ligaments) {
+        for (MechanismLigament2d ligament : ligaments) {
+            if (lastLigament == null) {
+                lastLigament = root.append(ligament);
+            }
+            else {
+                lastLigament = lastLigament.append(ligament);
+            }
+        }
+    }
+
 }
