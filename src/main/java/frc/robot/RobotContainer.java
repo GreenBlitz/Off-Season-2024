@@ -6,11 +6,14 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.simulation.ElevatorSimulation;
+import frc.robot.simulation.MechanismInstance2d;
 import frc.robot.simulation.SingleJointedArmSimulation;
 
 /**
@@ -22,9 +25,15 @@ import frc.robot.simulation.SingleJointedArmSimulation;
 public class RobotContainer {
 
     public static final SingleJointedArmSimulation ARM = new SingleJointedArmSimulation(new DCMotor(1,1,1,1,1,1), 1,1,1,
-            Rotation2d.fromDegrees(45), Rotation2d.fromDegrees(135), Rotation2d.fromDegrees(90), false);
+            Rotation2d.fromDegrees(45), Rotation2d.fromDegrees(135), Rotation2d.fromDegrees(90), false, new Color8Bit(Color.kPurple)
+    );
     public static final ElevatorSimulation ELEVATOR = new ElevatorSimulation(new DCMotor(1,1,1,1,1,1),1,1,1,
-            0.01, 1,0.9,false);
+            0.01, 5,4,false, new Color8Bit(Color.kBlack));
+
+    public static final ElevatorSimulation SECOND_ELEVATOR = new ElevatorSimulation(new DCMotor(1,1,1,1,1,1),1,1,1,
+            0.01, 5,4,false, new Color8Bit(Color.kGreen));
+
+    public static final MechanismInstance2d MECH2D = new MechanismInstance2d("arm on elevator", 10, 10, 5, 0, ELEVATOR,  ARM);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.

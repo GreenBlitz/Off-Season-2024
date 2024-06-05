@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.utils.roborioutils.RoborioUtils;
 
 public class SingleJointedArmSimulation extends MotorSimulation implements MechanismUser2d {
@@ -13,7 +14,8 @@ public class SingleJointedArmSimulation extends MotorSimulation implements Mecha
     private final MechanismLigament2d armLigament2d;
 
     public SingleJointedArmSimulation(DCMotor gearbox, double gearRatio, double armLengthMeters, double armMassKilograms,
-            Rotation2d minimumAngle, Rotation2d maximumAngle, Rotation2d startingAngle, boolean simulateGravity) {
+            Rotation2d minimumAngle, Rotation2d maximumAngle, Rotation2d startingAngle, boolean simulateGravity,
+            Color8Bit mechanismColor2d) {
         this.armSimulation = new SingleJointedArmSim(
                 gearbox,
                 gearRatio,
@@ -25,6 +27,7 @@ public class SingleJointedArmSimulation extends MotorSimulation implements Mecha
                 startingAngle.getRadians()
         );
         armLigament2d = new MechanismLigament2d("Arm", armLengthMeters, startingAngle.getDegrees());
+        armLigament2d.setColor(mechanismColor2d);
     }
 
     @Override

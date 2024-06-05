@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.utils.Conversions;
 import frc.utils.roborioutils.RoborioUtils;
 
@@ -16,7 +17,9 @@ public class ElevatorSimulation extends MotorSimulation implements MechanismUser
     private final MechanismLigament2d elevatorLigament2d;
 
     public ElevatorSimulation(DCMotor gearbox, double gearRatio, double carriageMassKilograms, double drumRadiusMeters,
-            double minimumHeightMeters, double maximumHeightMeters, double startingHeightMeters, boolean simulateGravity) {
+            double minimumHeightMeters, double maximumHeightMeters, double startingHeightMeters,
+            boolean simulateGravity,
+            Color8Bit mechanismColor2d) {
         this.diameterMeters = 2 * drumRadiusMeters;
         this.elevatorSimulation = new ElevatorSim(
                 gearbox,
@@ -29,6 +32,7 @@ public class ElevatorSimulation extends MotorSimulation implements MechanismUser
                 startingHeightMeters
         );
         elevatorLigament2d = new MechanismLigament2d("Elevator", startingHeightMeters, 90);
+        elevatorLigament2d.setColor(mechanismColor2d);
     }
 
     @Override
