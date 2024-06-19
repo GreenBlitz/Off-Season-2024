@@ -213,10 +213,10 @@ spotless {
             include "src/main/java/frc/**/*.java"
             exclude '**/build/**', '**/build-*/**'
         }
-        indentWithSpaces(4)
         removeUnusedImports()
         trimTrailingWhitespace()
-        endWithNewline()
+        eclipse().configFile("codestyle.xml")
+        formatAnnotations()
     }
     groovyGradle {
         target fileTree(".") {
