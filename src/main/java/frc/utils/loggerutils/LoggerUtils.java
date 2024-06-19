@@ -19,8 +19,7 @@ public class LoggerUtils {
 		Path usbPath = Path.of(LoggerConstants.USB_LOG_PATH);
 		if (Files.exists(usbPath) && Files.isWritable(usbPath)) {
 			startLoggerOnUSB();
-		}
-		else {
+		} else {
 			startLoggerOnRoborio();
 			reportAlertsToLog();
 		}

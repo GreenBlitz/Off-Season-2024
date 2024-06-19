@@ -21,8 +21,8 @@ class BatteryConstants {
 	protected static final PowerDistribution.ModuleType POWER_DISTRIBUTION_TYPE = PowerDistribution.ModuleType.kRev;
 
 	protected static PowerDistribution POWER_DISTRIBUTION = new PowerDistribution(
-			POWER_DISTRIBUTION_CAN_ID,
-			POWER_DISTRIBUTION_TYPE
+		POWER_DISTRIBUTION_CAN_ID,
+		POWER_DISTRIBUTION_TYPE
 	);
 
 	protected static final Command BATTERY_LIMITER = new BatteryLimiter().ignoringDisable(true);

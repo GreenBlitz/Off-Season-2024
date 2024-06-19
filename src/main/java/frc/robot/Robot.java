@@ -15,10 +15,9 @@ import frc.utils.cycletimeutils.CycleTimeUtils;
 import org.littletonrobotics.junction.LoggedRobot;
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
- * project.
+ * The VM is configured to automatically run this class, and to call the functions corresponding to each mode, as described in the
+ * TimedRobot documentation. If you change the name of this class or the package after creating this project, you must also update
+ * the build.gradle file in the project.
  */
 public class Robot extends LoggedRobot {
 
@@ -64,16 +63,16 @@ public class Robot extends LoggedRobot {
 
 	private void initializeLogger() {
 		switch (RobotConstants.ROBOT_TYPE) {
-			case REAL -> {
-				LoggerUtils.startRealLogger();
-			}
-			case SIMULATION -> {
-				LoggerUtils.startSimulationLogger();
-			}
-			case REPLAY -> {
-				setUseTiming(false); // Run as fast as possible
-				LoggerUtils.startReplayLogger();
-			}
+		case REAL -> {
+			LoggerUtils.startRealLogger();
+		}
+		case SIMULATION -> {
+			LoggerUtils.startSimulationLogger();
+		}
+		case REPLAY -> {
+			setUseTiming(false); // Run as fast as possible
+			LoggerUtils.startReplayLogger();
+		}
 		}
 	}
 

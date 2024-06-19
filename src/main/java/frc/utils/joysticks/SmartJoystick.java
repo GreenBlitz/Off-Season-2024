@@ -22,7 +22,7 @@ public class SmartJoystick {
 	 * This constructor constructs the joystick based on the joystick port we give it.
 	 *
 	 * @param joystick_port The port of the joystick.
-	 * @param deadzone values if the stick below it will count as 0.
+	 * @param deadzone      values if the stick below it will count as 0.
 	 */
 	public SmartJoystick(int joystick_port, double deadzone) {
 		this(new Joystick(joystick_port), deadzone);
@@ -31,7 +31,7 @@ public class SmartJoystick {
 	/**
 	 * This constructor uses a joystick and assigns it button values and numbers.
 	 *
-	 * @param stick The joystick object.
+	 * @param stick    The joystick object.
 	 * @param deadzone values if the stick below it will count as 0.
 	 */
 	public SmartJoystick(Joystick stick, double deadzone) {
@@ -176,7 +176,7 @@ public class SmartJoystick {
 	/**
 	 * Rumbles the controller at a certain side
 	 *
-	 * @param left rumble side (false for left)
+	 * @param left  rumble side (false for left)
 	 * @param power normalized rumble [0, 1]
 	 */
 	public void rumble(boolean left, double power) {

@@ -12,18 +12,26 @@ public class ElevatorSimulation extends MotorSimulation {
 
 	private final double diameterMeters;
 
-	public ElevatorSimulation(DCMotor gearbox, double gearRatio, double carriageMassKilograms, double drumRadiusMeters,
-			double minimumHeightMeters, double maximumHeightMeters, double startingHeightMeters, boolean simulateGravity) {
+	public ElevatorSimulation(
+		DCMotor gearbox,
+		double gearRatio,
+		double carriageMassKilograms,
+		double drumRadiusMeters,
+		double minimumHeightMeters,
+		double maximumHeightMeters,
+		double startingHeightMeters,
+		boolean simulateGravity
+	) {
 		this.diameterMeters = 2 * drumRadiusMeters;
 		this.elevatorSimulation = new ElevatorSim(
-				gearbox,
-				gearRatio,
-				carriageMassKilograms,
-				drumRadiusMeters,
-				minimumHeightMeters,
-				maximumHeightMeters,
-				simulateGravity,
-				startingHeightMeters
+			gearbox,
+			gearRatio,
+			carriageMassKilograms,
+			drumRadiusMeters,
+			minimumHeightMeters,
+			maximumHeightMeters,
+			simulateGravity,
+			startingHeightMeters
 		);
 	}
 
@@ -39,12 +47,7 @@ public class ElevatorSimulation extends MotorSimulation {
 	 */
 	@Override
 	public Rotation2d getPosition() {
-		return Rotation2d.fromRotations(
-				Conversions.distanceToRevolutions(
-						getPositionMeters(),
-						diameterMeters
-				)
-		);
+		return Rotation2d.fromRotations(Conversions.distanceToRevolutions(getPositionMeters(), diameterMeters));
 	}
 
 	public double getPositionMeters() {
@@ -58,12 +61,7 @@ public class ElevatorSimulation extends MotorSimulation {
 	 */
 	@Override
 	public Rotation2d getVelocity() {
-		return Rotation2d.fromRotations(
-				Conversions.distanceToRevolutions(
-						getVelocityMetersPerSecond(),
-						diameterMeters
-				)
-		);
+		return Rotation2d.fromRotations(Conversions.distanceToRevolutions(getVelocityMetersPerSecond(), diameterMeters));
 	}
 
 	public double getVelocityMetersPerSecond() {

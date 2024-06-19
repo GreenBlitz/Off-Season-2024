@@ -9,17 +9,25 @@ public class SingleJointedArmSimulation extends MotorSimulation {
 
 	private final SingleJointedArmSim armSimulation;
 
-	public SingleJointedArmSimulation(DCMotor gearbox, double gearRatio, double armLengthMeters, double armMassKilograms,
-			Rotation2d minimumAngle, Rotation2d maximumAngle, Rotation2d startingAngle, boolean simulateGravity) {
+	public SingleJointedArmSimulation(
+		DCMotor gearbox,
+		double gearRatio,
+		double armLengthMeters,
+		double armMassKilograms,
+		Rotation2d minimumAngle,
+		Rotation2d maximumAngle,
+		Rotation2d startingAngle,
+		boolean simulateGravity
+	) {
 		this.armSimulation = new SingleJointedArmSim(
-				gearbox,
-				gearRatio,
-				SingleJointedArmSim.estimateMOI(armLengthMeters, armMassKilograms),
-				armLengthMeters,
-				minimumAngle.getRadians(),
-				maximumAngle.getRadians(),
-				simulateGravity,
-				startingAngle.getRadians()
+			gearbox,
+			gearRatio,
+			SingleJointedArmSim.estimateMOI(armLengthMeters, armMassKilograms),
+			armLengthMeters,
+			minimumAngle.getRadians(),
+			maximumAngle.getRadians(),
+			simulateGravity,
+			startingAngle.getRadians()
 		);
 	}
 

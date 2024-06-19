@@ -11,8 +11,8 @@ public class ExecuteEndCommand extends FunctionalCommand {
 	/**
 	 * Creates a new ExecuteEndCommand. Will run the given runnables when the command on execute and when it ends.
 	 *
-	 * @param onExecute the runnable to run on command execute
-	 * @param onEnd the runnable to run on command end
+	 * @param onExecute    the runnable to run on command execute
+	 * @param onEnd        the runnable to run on command end
 	 * @param requirements the subsystems required by this command
 	 */
 	public ExecuteEndCommand(Runnable onExecute, Runnable onEnd, SubsystemBase... requirements) {

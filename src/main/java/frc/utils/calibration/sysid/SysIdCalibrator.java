@@ -27,17 +27,22 @@ public class SysIdCalibrator {
 	 * IMPORTANT:
 	 *
 	 * @param voltageSetControl - note that this function needs to use kg in it so the mechanism won't move because of gravity.
-	 * For more on kG look on calibration -> staticcharacterization -> StaticCharacterizationObject
+	 *                          For more on kG look on calibration -> staticcharacterization -> StaticCharacterizationObject
 	 */
-	public SysIdCalibrator(boolean isCTRE, GBSubsystem subsystem, Consumer<Double> voltageSetControl, double voltageStepVolts,
-			double rampRateVoltsPerSecond) {
+	public SysIdCalibrator(
+		boolean isCTRE,
+		GBSubsystem subsystem,
+		Consumer<Double> voltageSetControl,
+		double voltageStepVolts,
+		double rampRateVoltsPerSecond
+	) {
 		this(
-				isCTRE,
-				subsystem,
-				voltageSetControl,
-				voltageStepVolts,
-				rampRateVoltsPerSecond,
-				SysIdConstants.DEFAULT_TIMEOUT_SECONDS
+			isCTRE,
+			subsystem,
+			voltageSetControl,
+			voltageStepVolts,
+			rampRateVoltsPerSecond,
+			SysIdConstants.DEFAULT_TIMEOUT_SECONDS
 		);
 	}
 
@@ -45,16 +50,16 @@ public class SysIdCalibrator {
 	 * IMPORTANT:
 	 *
 	 * @param voltageSetControl - note that this function needs to use kg in it so the mechanism won't move because of gravity.
-	 * For more on kG look on calibration -> static -> StaticCalibrationObject -> FindKG
+	 *                          For more on kG look on calibration -> static -> StaticCalibrationObject -> FindKG
 	 */
 	public SysIdCalibrator(boolean isCTRE, GBSubsystem subsystem, Consumer<Double> voltageSetControl, double voltageStep) {
 		this(
-				isCTRE,
-				subsystem,
-				voltageSetControl,
-				voltageStep,
-				SysIdConstants.DEFAULT_RAMP_RATE_VOLTS_PER_SECOND,
-				SysIdConstants.DEFAULT_TIMEOUT_SECONDS
+			isCTRE,
+			subsystem,
+			voltageSetControl,
+			voltageStep,
+			SysIdConstants.DEFAULT_RAMP_RATE_VOLTS_PER_SECOND,
+			SysIdConstants.DEFAULT_TIMEOUT_SECONDS
 		);
 	}
 
@@ -62,16 +67,16 @@ public class SysIdCalibrator {
 	 * IMPORTANT:
 	 *
 	 * @param voltageSetControl - note that this function needs to use kg in it so the mechanism won't move because of gravity.
-	 * For more on kG look on calibration -> static -> StaticCalibrationObject -> FindKG
+	 *                          For more on kG look on calibration -> static -> StaticCalibrationObject -> FindKG
 	 */
 	public SysIdCalibrator(boolean isCTRE, GBSubsystem subsystem, Consumer<Double> voltageSetControl) {
 		this(
-				isCTRE,
-				subsystem,
-				voltageSetControl,
-				SysIdConstants.DEFAULT_VOLTAGE_STEP,
-				SysIdConstants.DEFAULT_RAMP_RATE_VOLTS_PER_SECOND,
-				SysIdConstants.DEFAULT_TIMEOUT_SECONDS
+			isCTRE,
+			subsystem,
+			voltageSetControl,
+			SysIdConstants.DEFAULT_VOLTAGE_STEP,
+			SysIdConstants.DEFAULT_RAMP_RATE_VOLTS_PER_SECOND,
+			SysIdConstants.DEFAULT_TIMEOUT_SECONDS
 		);
 	}
 
@@ -79,26 +84,32 @@ public class SysIdCalibrator {
 	 * IMPORTANT:
 	 *
 	 * @param voltageSetControl - note that this function needs to use kg in it so the mechanism won't move because of gravity.
-	 * For more on kG look on calibration -> static -> StaticCalibrationObject -> FindKG
+	 *                          For more on kG look on calibration -> static -> StaticCalibrationObject -> FindKG
 	 */
-	public SysIdCalibrator(boolean isCTRE, GBSubsystem subsystem, Consumer<Double> voltageSetControl, double voltageStepVolts,
-			double rampRateVoltsPerSecond, double timeoutSeconds) {
+	public SysIdCalibrator(
+		boolean isCTRE,
+		GBSubsystem subsystem,
+		Consumer<Double> voltageSetControl,
+		double voltageStepVolts,
+		double rampRateVoltsPerSecond,
+		double timeoutSeconds
+	) {
 		this.usedSubSystem = subsystem;
 		this.isCTRE = isCTRE;
 
 		final SysIdRoutine.Config config = new SysIdRoutine.Config(
-				Volts.of(rampRateVoltsPerSecond).per(Seconds.of(1)),
-				Volts.of(voltageStepVolts),
-				Seconds.of(timeoutSeconds),
-				this.isCTRE
-						? (state) -> SignalLogger.writeString("state", state.toString())
-						: (state) -> Logger.recordOutput("state", state.toString())
+			Volts.of(rampRateVoltsPerSecond).per(Seconds.of(1)),
+			Volts.of(voltageStepVolts),
+			Seconds.of(timeoutSeconds),
+			this.isCTRE
+				? (state) -> SignalLogger.writeString("state", state.toString())
+				: (state) -> Logger.recordOutput("state", state.toString())
 		);
 		final SysIdRoutine.Mechanism mechanism = new SysIdRoutine.Mechanism(
-				(Measure<Voltage> volts) -> voltageSetControl.accept(volts.in(Volts)),
-				null,
-				usedSubSystem,
-				usedSubSystem.getName()
+			(Measure<Voltage> volts) -> voltageSetControl.accept(volts.in(Volts)),
+			null,
+			usedSubSystem,
+			usedSubSystem.getName()
 		);
 
 		this.sysIdRoutine = new SysIdRoutine(config, mechanism);
@@ -125,9 +136,9 @@ public class SysIdCalibrator {
 
 	private Command getCTRECommand(Command sysIdCommand) {
 		return new SequentialCommandGroup(
-				new InstantCommand(SignalLogger::start),
-				sysIdCommand,
-				new InstantCommand(SignalLogger::stop)
+			new InstantCommand(SignalLogger::start),
+			sysIdCommand,
+			new InstantCommand(SignalLogger::stop)
 		).handleInterrupt(SignalLogger::stop);
 	}
 

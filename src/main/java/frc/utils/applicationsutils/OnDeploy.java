@@ -8,8 +8,6 @@ public class OnDeploy {
 		startComputerPrograms();
 	}
 
-	private static void startComputerPrograms() {
-
-	}
+	private static void startComputerPrograms() {}
 
 }

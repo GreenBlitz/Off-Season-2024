@@ -16,7 +16,7 @@ public class CMDHandler {
 	public static void runCMDCommand(String command) {
 		Runtime runtime = Runtime.getRuntime();
 		try {
-			runtime.exec(new String[]{APPLICATION, CMD_DIRECTORY, command});
+			runtime.exec(new String[] { APPLICATION, CMD_DIRECTORY, command });
 		} catch (IOException exception) {
 			System.out.println(ERROR_MESSAGE + command);// can't be logged because on computer side
 		}
@@ -27,8 +27,7 @@ public class CMDHandler {
 	}
 
 	/**
-	 * @param javaPath The path from the java package to the class.
-	 *				 example: "frc/utils/applicationsutils/CMDHandler.java"
+	 * @param javaPath The path from the java package to the class. example: "frc/utils/applicationsutils/CMDHandler.java"
 	 */
 	public static void runJavaClass(String javaPath) {
 		int lastSlash = javaPath.lastIndexOf('/');
@@ -48,8 +47,7 @@ public class CMDHandler {
 	}
 
 	/**
-	 * @param pythonPath The path from the java package to the class.
-	 *				   example: "keyboard/keyboard_to_nt.py"
+	 * @param pythonPath The path from the java package to the class. example: "keyboard/keyboard_to_nt.py"
 	 */
 	public static void runPythonClass(String pythonPath) {
 		runCMDCommand(PATH_TO_PYTHON_DIRECTORY, "py " + pythonPath);

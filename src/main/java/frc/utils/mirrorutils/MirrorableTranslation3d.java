@@ -15,11 +15,7 @@ public class MirrorableTranslation3d extends Mirrorable<Translation3d> {
 
 	@Override
 	protected Translation3d mirror(Translation3d translation) {
-		return new Translation3d(
-				FieldConstants.FIELD_LENGTH_METERS - translation.getX(),
-				translation.getY(),
-				translation.getZ()
-		);
+		return new Translation3d(FieldConstants.FIELD_LENGTH_METERS - translation.getX(), translation.getY(), translation.getZ());
 	}
 
 }

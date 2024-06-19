@@ -40,9 +40,13 @@ public class WheelRadiusCharacterization extends Command {
 	private double wheelRadiusMeters = 0.0;
 
 	public WheelRadiusCharacterization(
-			GBSubsystem drive, double driveRadiusMeters, Rotation2d characterizationSpeed,
-			Supplier<Rotation2d[]> wheelDriveDistanceSupplier, Supplier<Rotation2d> gyroAngleSupplier,
-			Consumer<Rotation2d> velocityControl, Runnable onEnd
+		GBSubsystem drive,
+		double driveRadiusMeters,
+		Rotation2d characterizationSpeed,
+		Supplier<Rotation2d[]> wheelDriveDistanceSupplier,
+		Supplier<Rotation2d> gyroAngleSupplier,
+		Consumer<Rotation2d> velocityControl,
+		Runnable onEnd
 	) {
 		this.characterizationSpeed = characterizationSpeed;
 		this.driveRadiusMeters = driveRadiusMeters;
@@ -92,8 +96,7 @@ public class WheelRadiusCharacterization extends Command {
 		onEnd.run();
 		if (accumGyroYawRads <= MathConstants.FULL_CIRCLE.getRadians()) {
 			Logger.recordOutput(WheelRadiusConstants.LOG_PATH, "Not enough data for characterization");
-		}
-		else {
+		} else {
 			Logger.recordOutput(WheelRadiusConstants.LOG_PATH, wheelRadiusMeters + " meters");
 		}
 	}
