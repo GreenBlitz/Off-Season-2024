@@ -7,31 +7,31 @@ import frc.utils.DriverStationUtils;
 
 class BatteryLimiter extends Command {
 
-    private final LinearFilter voltageFilter;
+	private final LinearFilter voltageFilter;
 
-    public BatteryLimiter() {
-        this.voltageFilter = LinearFilter.movingAverage(BatteryConstants.NUMBER_OF_VALUES_IN_AVERAGE);
-    }
+	public BatteryLimiter() {
+		this.voltageFilter = LinearFilter.movingAverage(BatteryConstants.NUMBER_OF_VALUES_IN_AVERAGE);
+	}
 
-    @Override
-    public void initialize() {
-        // Fill linear filter with battery voltage values instead of 1/NUMBER_OF_VALUES_IN_AVERAGE
-        for (int i = 0; i < BatteryConstants.NUMBER_OF_VALUES_IN_AVERAGE; i++) {
-            voltageFilter.calculate(Battery.getCurrentVoltage());
-        }
-    }
+	@Override
+	public void initialize() {
+		// Fill linear filter with battery voltage values instead of 1/NUMBER_OF_VALUES_IN_AVERAGE
+		for (int i = 0; i < BatteryConstants.NUMBER_OF_VALUES_IN_AVERAGE; i++) {
+			voltageFilter.calculate(Battery.getCurrentVoltage());
+		}
+	}
 
-    @Override
-    public void execute() {
-        Battery.logBatteryStatus();
+	@Override
+	public void execute() {
+		Battery.logBatteryStatus();
 
-        double currentAverageVoltage = voltageFilter.calculate(Battery.getCurrentVoltage());
-        if (currentAverageVoltage <= Battery.getMinimumVoltage()) {
-            Battery.reportAlertsToLog();
-            if (!DriverStationUtils.isGame() && RobotConstants.ENABLE_BATTERY_LIMITER) {
-                throw new java.lang.RuntimeException("BATTERY IS LOW");
-            }
-        }
-    }
+		double currentAverageVoltage = voltageFilter.calculate(Battery.getCurrentVoltage());
+		if (currentAverageVoltage <= Battery.getMinimumVoltage()) {
+			Battery.reportAlertsToLog();
+			if (!DriverStationUtils.isGame() && RobotConstants.ENABLE_BATTERY_LIMITER) {
+				throw new java.lang.RuntimeException("BATTERY IS LOW");
+			}
+		}
+	}
 
 }

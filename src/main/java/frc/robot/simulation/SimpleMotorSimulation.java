@@ -7,35 +7,35 @@ import frc.utils.cycletimeutils.CycleTimeUtils;
 
 public class SimpleMotorSimulation extends MotorSimulation {
 
-    private final DCMotorSim motorSimulation;
+	private final DCMotorSim motorSimulation;
 
-    public SimpleMotorSimulation(DCMotor gearbox, double gearRatio, double momentOfInertia) {
-        this.motorSimulation = new DCMotorSim(gearbox, gearRatio, momentOfInertia);
-    }
+	public SimpleMotorSimulation(DCMotor gearbox, double gearRatio, double momentOfInertia) {
+		this.motorSimulation = new DCMotorSim(gearbox, gearRatio, momentOfInertia);
+	}
 
-    @Override
-    public double getCurrent() {
-        return motorSimulation.getCurrentDrawAmps();
-    }
+	@Override
+	public double getCurrent() {
+		return motorSimulation.getCurrentDrawAmps();
+	}
 
-    @Override
-    public Rotation2d getPosition() {
-        return Rotation2d.fromRadians(motorSimulation.getAngularPositionRad());
-    }
+	@Override
+	public Rotation2d getPosition() {
+		return Rotation2d.fromRadians(motorSimulation.getAngularPositionRad());
+	}
 
-    @Override
-    public Rotation2d getVelocity() {
-        return Rotation2d.fromRadians(motorSimulation.getAngularVelocityRadPerSec());
-    }
+	@Override
+	public Rotation2d getVelocity() {
+		return Rotation2d.fromRadians(motorSimulation.getAngularVelocityRadPerSec());
+	}
 
-    @Override
-    protected void setInputVoltage(double voltage) {
-        motorSimulation.setInputVoltage(voltage);
-    }
+	@Override
+	protected void setInputVoltage(double voltage) {
+		motorSimulation.setInputVoltage(voltage);
+	}
 
-    @Override
-    protected void updateMotor() {
-        motorSimulation.update(CycleTimeUtils.getCurrentCycleTime());
-    }
+	@Override
+	protected void updateMotor() {
+		motorSimulation.update(CycleTimeUtils.getCurrentCycleTime());
+	}
 
 }

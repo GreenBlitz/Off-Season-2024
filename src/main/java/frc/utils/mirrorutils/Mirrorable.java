@@ -11,37 +11,37 @@ import frc.utils.DriverStationUtils;
  */
 public abstract class Mirrorable<T> {
 
-    protected final T nonMirroredObject, mirroredObject;
+	protected final T nonMirroredObject, mirroredObject;
 
-    protected final boolean mirrorWhenRedAlliance;
+	protected final boolean mirrorWhenRedAlliance;
 
-    /**
-     * Creates a new mirrorable object.
-     *
-     * @param nonMirroredObject the object when the robot is on the blue alliance, or the non-mirrored object
-     * @param mirrorWhenRedAlliance whether to mirror the object when the robot is on the red alliance
-     */
-    protected Mirrorable(T nonMirroredObject, boolean mirrorWhenRedAlliance) {
-        this.nonMirroredObject = nonMirroredObject;
-        this.mirroredObject = mirror(nonMirroredObject);
-        this.mirrorWhenRedAlliance = mirrorWhenRedAlliance;
-    }
+	/**
+	 * Creates a new mirrorable object.
+	 *
+	 * @param nonMirroredObject the object when the robot is on the blue alliance, or the non-mirrored object
+	 * @param mirrorWhenRedAlliance whether to mirror the object when the robot is on the red alliance
+	 */
+	protected Mirrorable(T nonMirroredObject, boolean mirrorWhenRedAlliance) {
+		this.nonMirroredObject = nonMirroredObject;
+		this.mirroredObject = mirror(nonMirroredObject);
+		this.mirrorWhenRedAlliance = mirrorWhenRedAlliance;
+	}
 
-    /**
-     * @return the current object.
-     * If the robot is on the red alliance and the object should be mirrored, the mirrored object is returned.
-     * Otherwise, the non-mirrored object is returned.
-     */
-    public T get() {
-        return DriverStationUtils.isRedAlliance() && mirrorWhenRedAlliance ? mirroredObject : nonMirroredObject;
-    }
+	/**
+	 * @return the current object.
+	 * If the robot is on the red alliance and the object should be mirrored, the mirrored object is returned.
+	 * Otherwise, the non-mirrored object is returned.
+	 */
+	public T get() {
+		return DriverStationUtils.isRedAlliance() && mirrorWhenRedAlliance ? mirroredObject : nonMirroredObject;
+	}
 
-    /**
-     * Mirrors the object across the center of the field.
-     *
-     * @param object the object to mirror
-     * @return the mirrored object
-     */
-    protected abstract T mirror(T object);
+	/**
+	 * Mirrors the object across the center of the field.
+	 *
+	 * @param object the object to mirror
+	 * @return the mirrored object
+	 */
+	protected abstract T mirror(T object);
 
 }

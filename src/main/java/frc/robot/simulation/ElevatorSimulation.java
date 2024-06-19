@@ -8,76 +8,76 @@ import frc.utils.cycletimeutils.CycleTimeUtils;
 
 public class ElevatorSimulation extends MotorSimulation {
 
-    private final ElevatorSim elevatorSimulation;
+	private final ElevatorSim elevatorSimulation;
 
-    private final double diameterMeters;
+	private final double diameterMeters;
 
-    public ElevatorSimulation(DCMotor gearbox, double gearRatio, double carriageMassKilograms, double drumRadiusMeters,
-            double minimumHeightMeters, double maximumHeightMeters, double startingHeightMeters, boolean simulateGravity) {
-        this.diameterMeters = 2 * drumRadiusMeters;
-        this.elevatorSimulation = new ElevatorSim(
-                gearbox,
-                gearRatio,
-                carriageMassKilograms,
-                drumRadiusMeters,
-                minimumHeightMeters,
-                maximumHeightMeters,
-                simulateGravity,
-                startingHeightMeters
-        );
-    }
+	public ElevatorSimulation(DCMotor gearbox, double gearRatio, double carriageMassKilograms, double drumRadiusMeters,
+			double minimumHeightMeters, double maximumHeightMeters, double startingHeightMeters, boolean simulateGravity) {
+		this.diameterMeters = 2 * drumRadiusMeters;
+		this.elevatorSimulation = new ElevatorSim(
+				gearbox,
+				gearRatio,
+				carriageMassKilograms,
+				drumRadiusMeters,
+				minimumHeightMeters,
+				maximumHeightMeters,
+				simulateGravity,
+				startingHeightMeters
+		);
+	}
 
-    @Override
-    public double getCurrent() {
-        return elevatorSimulation.getCurrentDrawAmps();
-    }
+	@Override
+	public double getCurrent() {
+		return elevatorSimulation.getCurrentDrawAmps();
+	}
 
-    /**
-     * Returns in Rotation2D the position of the drum
-     *
-     * @return the position
-     */
-    @Override
-    public Rotation2d getPosition() {
-        return Rotation2d.fromRotations(
-                Conversions.distanceToRevolutions(
-                        getPositionMeters(),
-                        diameterMeters
-                )
-        );
-    }
+	/**
+	 * Returns in Rotation2D the position of the drum
+	 *
+	 * @return the position
+	 */
+	@Override
+	public Rotation2d getPosition() {
+		return Rotation2d.fromRotations(
+				Conversions.distanceToRevolutions(
+						getPositionMeters(),
+						diameterMeters
+				)
+		);
+	}
 
-    public double getPositionMeters() {
-        return elevatorSimulation.getPositionMeters();
-    }
+	public double getPositionMeters() {
+		return elevatorSimulation.getPositionMeters();
+	}
 
-    /**
-     * Returns the velocity in Rotation2D of the drum
-     *
-     * @return the velocity
-     */
-    @Override
-    public Rotation2d getVelocity() {
-        return Rotation2d.fromRotations(
-                Conversions.distanceToRevolutions(
-                        getVelocityMetersPerSecond(),
-                        diameterMeters
-                )
-        );
-    }
+	/**
+	 * Returns the velocity in Rotation2D of the drum
+	 *
+	 * @return the velocity
+	 */
+	@Override
+	public Rotation2d getVelocity() {
+		return Rotation2d.fromRotations(
+				Conversions.distanceToRevolutions(
+						getVelocityMetersPerSecond(),
+						diameterMeters
+				)
+		);
+	}
 
-    public double getVelocityMetersPerSecond() {
-        return elevatorSimulation.getVelocityMetersPerSecond();
-    }
+	public double getVelocityMetersPerSecond() {
+		return elevatorSimulation.getVelocityMetersPerSecond();
+	}
 
-    @Override
-    protected void setInputVoltage(double voltage) {
-        elevatorSimulation.setInputVoltage(voltage);
-    }
+	@Override
+	protected void setInputVoltage(double voltage) {
+		elevatorSimulation.setInputVoltage(voltage);
+	}
 
-    @Override
-    protected void updateMotor() {
-        elevatorSimulation.update(CycleTimeUtils.getCurrentCycleTime());
-    }
+	@Override
+	protected void updateMotor() {
+		elevatorSimulation.update(CycleTimeUtils.getCurrentCycleTime());
+	}
 
 }

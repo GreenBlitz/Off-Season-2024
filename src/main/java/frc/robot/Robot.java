@@ -22,59 +22,59 @@ import org.littletonrobotics.junction.LoggedRobot;
  */
 public class Robot extends LoggedRobot {
 
-    private Command autonomousCommand;
+	private Command autonomousCommand;
 
-    private RobotContainer robotContainer;
+	private RobotContainer robotContainer;
 
-    @Override
-    public void robotInit() {
-        initializeLogger();
-        Battery.scheduleBatteryLimiterCommand();// Using RobotConstants.BATTERY_LIMITER_ENABLE, disable with it!
+	@Override
+	public void robotInit() {
+		initializeLogger();
+		Battery.scheduleBatteryLimiterCommand();// Using RobotConstants.BATTERY_LIMITER_ENABLE, disable with it!
 
-        robotContainer = new RobotContainer();
-    }
+		robotContainer = new RobotContainer();
+	}
 
-    @Override
-    public void autonomousInit() {
-        autonomousCommand = robotContainer.getAutonomousCommand();
+	@Override
+	public void autonomousInit() {
+		autonomousCommand = robotContainer.getAutonomousCommand();
 
-        if (autonomousCommand != null) {
-            autonomousCommand.schedule();
-        }
-    }
+		if (autonomousCommand != null) {
+			autonomousCommand.schedule();
+		}
+	}
 
-    @Override
-    public void teleopInit() {
-        if (autonomousCommand != null) {
-            autonomousCommand.cancel();
-        }
-    }
+	@Override
+	public void teleopInit() {
+		if (autonomousCommand != null) {
+			autonomousCommand.cancel();
+		}
+	}
 
-    @Override
-    public void robotPeriodic() {
-        CycleTimeUtils.updateCycleTime(); // Better to be first
-        CommandScheduler.getInstance().run();
-        CANStatus.logAllBusStatuses();
-    }
+	@Override
+	public void robotPeriodic() {
+		CycleTimeUtils.updateCycleTime(); // Better to be first
+		CommandScheduler.getInstance().run();
+		CANStatus.logAllBusStatuses();
+	}
 
-    @Override
-    public void simulationPeriodic() {
-        MotorSimulation.updateRegisteredSimulations();
-    }
+	@Override
+	public void simulationPeriodic() {
+		MotorSimulation.updateRegisteredSimulations();
+	}
 
-    private void initializeLogger() {
-        switch (RobotConstants.ROBOT_TYPE) {
-            case REAL -> {
-                LoggerUtils.startRealLogger();
-            }
-            case SIMULATION -> {
-                LoggerUtils.startSimulationLogger();
-            }
-            case REPLAY -> {
-                setUseTiming(false); // Run as fast as possible
-                LoggerUtils.startReplayLogger();
-            }
-        }
-    }
+	private void initializeLogger() {
+		switch (RobotConstants.ROBOT_TYPE) {
+			case REAL -> {
+				LoggerUtils.startRealLogger();
+			}
+			case SIMULATION -> {
+				LoggerUtils.startSimulationLogger();
+			}
+			case REPLAY -> {
+				setUseTiming(false); // Run as fast as possible
+				LoggerUtils.startReplayLogger();
+			}
+		}
+	}
 
 }
