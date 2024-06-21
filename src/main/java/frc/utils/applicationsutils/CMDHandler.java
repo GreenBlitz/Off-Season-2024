@@ -52,4 +52,5 @@ public class CMDHandler {
 	public static void runPythonClass(String pythonPath) {
 		runCMDCommand(PATH_TO_PYTHON_DIRECTORY, "py " + pythonPath);
 	}
+
 }

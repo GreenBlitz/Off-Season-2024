@@ -12,7 +12,7 @@ status=$?
 
 if [ "$status" = 0 ]; then
     echo "Static analysis succeeded. Updating commit."
-    git add "${changes[@]}"
+#    git add "${changes[@]}"
 else
     echo "${RED}-------------------------------------------"
     echo       "Spotless exited with nonzero status.       "

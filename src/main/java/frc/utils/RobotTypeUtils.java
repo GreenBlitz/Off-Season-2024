@@ -13,6 +13,7 @@ public class RobotTypeUtils {
 	}
 
 	public enum RobotType {
+
 		REAL,
 		SIMULATION,
 		REPLAY;
@@ -28,6 +29,7 @@ public class RobotTypeUtils {
 		public boolean isReplay() {
 			return this.equals(RobotType.REPLAY);
 		}
+
 	}
 
 }

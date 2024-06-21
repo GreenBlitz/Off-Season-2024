@@ -184,6 +184,7 @@ public class SmartJoystick {
 	}
 
 	public enum Axis {
+
 		LEFT_X(0, true),
 		LEFT_Y(1, true),
 		LEFT_TRIGGER(2, false),
@@ -207,6 +208,7 @@ public class SmartJoystick {
 		public double getValue(SmartJoystick stick) {
 			return inverted * stick.getRawAxis(axis);
 		}
+
 	}
 
 }
