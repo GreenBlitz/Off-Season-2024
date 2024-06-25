@@ -10,6 +10,8 @@ public class PoseEstimatorConstants {
 
     public static double ODOMETRY_FREQUENCY_HERTZ = 200.0;
 
+    public static final double POSE_BUFFER_SIZE_SECONDS = 2.0;
+
     protected static String POSE_LOG_PATH = "Robot Pose";
 
 
