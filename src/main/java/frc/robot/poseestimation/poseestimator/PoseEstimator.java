@@ -9,16 +9,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.poseestimation.OdometryObservation;
 import frc.robot.subsystems.swerve.SwerveConstants;
 import org.littletonrobotics.junction.Logger;
-
 import static frc.robot.RobotContainer.POSE_ESTIMATOR;
 import static frc.robot.RobotContainer.SWERVE;
 
-/**
- * A class that estimates the robot's pose using team 6328's custom pose estimator.
- */
 public class PoseEstimator implements AutoCloseable {
 
-    private final Field2d field; //todo - maybe create field class, maybe delete field
+    private final Field2d field;
     private final PoseEstimator6328 swerveDrivePoseEstimator;
     private Pose2d robotPose;
 
@@ -33,7 +29,7 @@ public class PoseEstimator implements AutoCloseable {
     }
 
     private void setLoggingPathToPaths() {
-        PathPlannerLogging.setLogActivePathCallback((pose) -> {//todo - move to pp util
+        PathPlannerLogging.setLogActivePathCallback((pose) -> {
             field.getObject("path").setPoses(pose);
             //todo - move to swerve
             Logger.recordOutput(SwerveConstants.SWERVE_LOG_PATH + "Current Path To Follow", pose.toArray(new Pose2d[0]));
@@ -69,7 +65,6 @@ public class PoseEstimator implements AutoCloseable {
         return robotPose;
     }
 
-
     public void updatePoseEstimatorOdometry() {
         int odometryUpdates = SWERVE.getOdometryTimeStepQueue().length;
         SwerveDriveWheelPositions[] swerveWheelPositions = new SwerveDriveWheelPositions[odometryUpdates];
@@ -83,18 +78,7 @@ public class PoseEstimator implements AutoCloseable {
         POSE_ESTIMATOR.updatePoseEstimatorStates(swerveWheelPositions, gyroRotations, SWERVE.getOdometryTimeStepQueue());
     }
 
-    /**
-     * Updates the pose estimator with the given swerve wheel positions and gyro rotations.
-     * This function accepts an array of swerve wheel positions and an array of gyro rotations because the odometry can be updated
-     * at a faster rate than the main loop (which is 50 hertz).
-     * This means you could have a couple of odometry updates per main loop, and you would want to update the pose estimator with
-     * all of them.
-     *
-     * @param swerveWheelPositions the swerve wheel positions accumulated since the last update
-     * @param gyroRotations the gyro rotations accumulated since the last update
-     */
-    private void updatePoseEstimatorStates(SwerveDriveWheelPositions[] swerveWheelPositions, Rotation2d[] gyroRotations,
-            double[] timestamps) {
+    private void updatePoseEstimatorStates(SwerveDriveWheelPositions[] swerveWheelPositions, Rotation2d[] gyroRotations, double[] timestamps) {
         for (int i = 0; i < swerveWheelPositions.length; i++) {
             swerveDrivePoseEstimator.addOdometryObservation(new OdometryObservation(
                     swerveWheelPositions[i],

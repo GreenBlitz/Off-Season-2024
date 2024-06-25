@@ -103,7 +103,6 @@ public class PoseEstimator6328 {
         if(isObservationTooOld(observation)) {
             return;
         }
-
         Optional<Pose2d> sample = poseBuffer.getSample(observation.getTimestamp());
         if (sample.isEmpty()) {
             return;
