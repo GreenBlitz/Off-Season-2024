@@ -220,6 +220,7 @@ spotless {
             include "src/main/java/frc/**/*.java"
             exclude '**/build/**', '**/build-*/**'
         }
+        toggleOffOn()
         removeUnusedImports()
         trimTrailingWhitespace()
         eclipse().configFile("codestyle.xml")

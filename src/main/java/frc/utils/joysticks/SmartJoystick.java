@@ -100,27 +100,23 @@ public class SmartJoystick {
 	 * This function returns the value of the axis, if the stick was square instead of circle
 	 *
 	 * @param axis The axis we want to use.
-	 * @return stick value if stick was square.
-	 * <p>
-	 * if @ marks the 1 point of each axis:
-	 * <p>
-	 * @formatter:off
-	 *			 Before:									After:
-	 *			  (1,0)
-	 *		   *****@*******	  @ (1,1)				*************
-	 *	  *****		   *****					*****	(1,0)	 *****
-	 *	 ***				   ***				***  -------@-------@   ***
-	 *	**					   **			  **   |		  (1,1)|	**
-	 *   **						 **			**	|			   |	 **
-	 *   **						 *@ (0,1)	  **	|		  (0,1)@	 **
-	 *   **						 **			**	|			   |	 **
-	 *   **						 **			**	|			   |	 **
-	 *	**					   **			  **   |_______________|	**
-	 *	 ***				   ***				***					***
-	 *	   *****		   *****					*****			*****
-	 *		   *************							*************
-	 * @formatter:on
-	 * </p>
+	 * @return stick value if stick was square. if @ marks the 1 point of each axis:
+	 *         <p>spotless:off
+	 *             Before:                                    After:
+	 *              (1,0)
+	 *           *****@*******      @ (1,1)                *************
+	 *      *****           *****                    *****    (1,0)     *****
+	 *     ***                   ***                ***  -------@-------@   ***
+	 *    **                       **              **   |          (1,1)|    **
+	 *   **                         **            **    |               |     **
+	 *   **                         *@ (0,1)      **    |          (0,1)@     **
+	 *   **                         **            **    |               |     **
+	 *   **                         **            **    |               |     **
+	 *    **                       **              **   |_______________|    **
+	 *     ***                   ***                ***                    ***
+	 *       *****           *****                    *****            *****
+	 *           *************                            *************
+	 * spotless:on</p>
 	 */
 	public double getSquaredAxis(Axis axis) {
 		if (joystick == null) {
