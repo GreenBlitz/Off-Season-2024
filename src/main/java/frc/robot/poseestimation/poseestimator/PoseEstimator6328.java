@@ -99,6 +99,13 @@ public class PoseEstimator6328 {
         return new Twist2d(twist.dx, twist.dy, observation.getGyroAngle().minus(lastGyroAngle).getRadians());
     }
 
+    private Transform2d useKalmanOnTransform(VisionObservation observation, Pose2d estimateAtTime) {
+        double[] squaredVisionMatrix = getSquaredVisionMatrix(observation);
+        Matrix<N3, N3> visionK = kalmanFilterAlgorithm(squaredVisionMatrix);
+        Transform2d diffFromOdometry = new Transform2d(estimateAtTime, observation.getVisionPose());
+        return scaleDiffFromKalman(diffFromOdometry, visionK);
+    }
+
     public void addVisionObservation(VisionObservation observation) {
         if(isObservationTooOld(observation)) {
             return;
@@ -107,22 +114,11 @@ public class PoseEstimator6328 {
         if (sample.isEmpty()) {
             return;
         }
-
         Transform2d sampleToOdometryTransform = new Transform2d(sample.get(), odometryPose);
         Transform2d odometryToSampleTransform = new Transform2d(odometryPose, sample.get());
-
         Pose2d estimateAtTime = estimatedPose.plus(odometryToSampleTransform);
-
-        double[] squaredVisionMatrix = getSquaredVisionMatrix(observation);
-
-        Matrix<N3, N3> visionK = kalmanFilterAlgorithm(squaredVisionMatrix);
-
-        Transform2d diffFromOdometry = new Transform2d(estimateAtTime, observation.getVisionPose());
-
-        Transform2d scaledTransform = scaleDiffFromKalman(diffFromOdometry, visionK);
-
         estimatedPose = estimateAtTime
-                .plus(scaledTransform)
+                .plus(useKalmanOnTransform(observation,estimateAtTime))
                 .plus(sampleToOdometryTransform);
     }
 
