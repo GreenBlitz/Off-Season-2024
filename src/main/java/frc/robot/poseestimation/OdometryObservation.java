@@ -3,13 +3,11 @@ package frc.robot.poseestimation;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
 
-public class OdometryObservation {
+public class OdometryObservation extends Observation{
 
     private SwerveDriveWheelPositions wheelPositions;
 
     private Rotation2d gyroAngle;
-
-    private double timestamp;
 
     public OdometryObservation(SwerveDriveWheelPositions wheelPositions, Rotation2d gyroAngle, double timestamp) {
         this.wheelPositions = wheelPositions;

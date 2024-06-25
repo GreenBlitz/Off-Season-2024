@@ -5,11 +5,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 
-public class VisionObservation {
+public class VisionObservation extends Observation{
 
     private Pose2d visionPose;
-
-    private double timestamp;
 
     private Matrix<N3, N1> stdDevs;
 

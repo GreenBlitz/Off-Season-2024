@@ -20,11 +20,13 @@ import edu.wpi.first.math.kinematics.SwerveDriveWheelPositions;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import frc.robot.poseestimation.Observation;
 import frc.robot.poseestimation.OdometryObservation;
 import frc.robot.poseestimation.VisionObservation;
 import frc.robot.subsystems.swerve.SwerveConstants;
 import org.littletonrobotics.junction.AutoLogOutput;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import static frc.robot.RobotContainer.SWERVE;
 
 public class PoseEstimator6328 {
@@ -52,15 +54,13 @@ public class PoseEstimator6328 {
         estimatedPose = new Pose2d();
         poseBuffer = TimeInterpolatableBuffer.createBuffer(PoseEstimatorConstants.POSE_BUFFER_SIZE_SECONDS);
         qStdDevs = new Matrix<>(Nat.N3(), Nat.N1());
-        lastWheelPositions =
-                new SwerveDriveWheelPositions(
-                        new SwerveModulePosition[]{
+        lastWheelPositions = new SwerveDriveWheelPositions(
+                        new SwerveModulePosition[] {
                                 new SwerveModulePosition(),
                                 new SwerveModulePosition(),
                                 new SwerveModulePosition(),
                                 new SwerveModulePosition()
-                        }
-                );
+                        });
         lastGyroAngle = new Rotation2d();
         isFirstOdometryUpdate = true;
         kinematics = SwerveConstants.KINEMATICS;
@@ -79,7 +79,7 @@ public class PoseEstimator6328 {
         boolean isGyroConnected = observation.getGyroAngle() != null;
 
         if (isGyroConnected) {
-            updateDeltaTheta(twist,observation);
+            twist = updateDeltaTheta(twist,observation);
         }
         odometryPose = odometryPose.exp(twist);
         poseBuffer.addSample(observation.getTimestamp(), odometryPose);
@@ -100,36 +100,51 @@ public class PoseEstimator6328 {
     }
 
     public void addVisionObservation(VisionObservation observation) {
-        // If measurement is old enough to be outside the pose buffer's timespan, skip.
-        try {
-            if (poseBuffer.getInternalBuffer().lastKey() - PoseEstimatorConstants.POSE_BUFFER_SIZE_SECONDS
-                    > observation.getTimestamp()) {
-                return;
-            }
-        }
-        catch (NoSuchElementException ex) {
-            return;
-        }
-        // Get odometry based pose at timestamp
-        var sample = poseBuffer.getSample(observation.getTimestamp());
-        if (sample.isEmpty()) {
-            // exit if not there
+        if(isObservationTooOld(observation)) {
             return;
         }
 
-        // sample --> odometryPose transform and backwards of that
+        Optional<Pose2d> sample = poseBuffer.getSample(observation.getTimestamp());
+        if (sample.isEmpty()) {
+            return;
+        }
+
         Transform2d sampleToOdometryTransform = new Transform2d(sample.get(), odometryPose);
         Transform2d odometryToSampleTransform = new Transform2d(odometryPose, sample.get());
-        // get old estimate by applying odometryToSample Transform
+
         Pose2d estimateAtTime = estimatedPose.plus(odometryToSampleTransform);
 
-        // Calculate 3 x 3 vision matrix
+        double[] squaredVisionMatrix = getSquaredVisionMatrix(observation);
+
+        Matrix<N3, N3> visionK = kalmanFilterAlgorithm(squaredVisionMatrix);
+
+        Transform2d diffFromOdometry = new Transform2d(estimateAtTime, observation.getVisionPose());
+
+        Transform2d scaledTransform = scaleDiffFromKalman(diffFromOdometry, visionK);
+
+        estimatedPose = estimateAtTime
+                .plus(scaledTransform)
+                .plus(sampleToOdometryTransform);
+    }
+
+    private boolean isObservationTooOld(Observation observation) {
+        try {
+            return poseBuffer.getInternalBuffer().lastKey() - PoseEstimatorConstants.POSE_BUFFER_SIZE_SECONDS > observation.getTimestamp();
+        }
+        catch (NoSuchElementException ex) {
+            return true;
+        }
+    }
+
+    private double[] getSquaredVisionMatrix(VisionObservation observation) {
         double[] r = new double[3];
         for (int i = 0; i < 3; ++i) {
             r[i] = observation.getStdDevs().get(i, 0) * observation.getStdDevs().get(i, 0);
         }
-        // Solve for closed form Kalman gain for continuous Kalman filter with A = 0
-        // and C = I. See wpimath/algorithms.md.
+        return r;
+    }
+
+    private Matrix<N3, N3> kalmanFilterAlgorithm(double[] squaredVisionMatrix) {
         Matrix<N3, N3> visionK = new Matrix<>(Nat.N3(), Nat.N3());
         for (int row = 0; row < 3; ++row) {
             double stdDev = qStdDevs.get(row, 0);
@@ -137,30 +152,23 @@ public class PoseEstimator6328 {
                 visionK.set(row, row, 0.0);
             }
             else {
-                visionK.set(row, row, stdDev / (stdDev + Math.sqrt(stdDev * r[row])));
+                visionK.set(row, row, stdDev / (stdDev + Math.sqrt(stdDev * squaredVisionMatrix[row])));
             }
         }
-        // difference between estimate and vision pose
-        Transform2d transform = new Transform2d(estimateAtTime, observation.getVisionPose());
-        // scale transform by visionK
-        var kTimesTransform = visionK.times(
-                VecBuilder.fill(transform.getX(), transform.getY(), transform.getRotation().getRadians())
-        );
-        Transform2d scaledTransform = new Transform2d(
-                kTimesTransform.get(0, 0),
-                kTimesTransform.get(1, 0),
-                Rotation2d.fromRadians(kTimesTransform.get(2, 0))
-        );
-
-        // Recalculate current estimate by applying scaled transform to old estimate
-        // then replaying odometry data
-        estimatedPose = estimateAtTime.plus(scaledTransform).plus(sampleToOdometryTransform);
+        return visionK;
     }
 
-    /**
-     * Reset estimated pose and odometry pose to pose <br>
-     * Clear pose buffer
-     */
+    private Transform2d scaleDiffFromKalman(Transform2d diffFromOdometry, Matrix<N3, N3> visionK) {
+        Matrix<N3, N1> kTimesDiff = visionK.times(
+                VecBuilder.fill(diffFromOdometry.getX(), diffFromOdometry.getY(), diffFromOdometry.getRotation().getRadians())
+        );
+        return new Transform2d(
+                kTimesDiff.get(0, 0),
+                kTimesDiff.get(1, 0),
+                Rotation2d.fromRadians(kTimesDiff.get(2, 0))
+        );
+    }
+
     public void resetPose(Pose2d initialPose) {
         estimatedPose = initialPose;
         lastGyroAngle = initialPose.getRotation();
