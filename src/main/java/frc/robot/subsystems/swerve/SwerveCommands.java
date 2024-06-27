@@ -79,6 +79,15 @@ public class SwerveCommands {
         return command;
     }
 
+    public static Command runForwardByVoltage(double volt){
+        Command command = new SequentialCommandGroup(
+                pointWheels(new Rotation2d(), false),
+                new RunCommand(() -> SWERVE.runModulesDriveByVoltage(volt))
+        );
+        command.setName("runForwardByVoltage " + volt);
+        return command;
+    }
+
     public static Command pointWheelsInX() {
         Command command = new FunctionalCommand(
                 () -> {},

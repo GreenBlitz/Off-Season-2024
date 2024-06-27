@@ -148,6 +148,17 @@ public class JoysticksBindings {
     private static void thirdJoystickButtons() {
         SmartJoystick usedJoystick = THIRD_JOYSTICK;
         // bindings
+        usedJoystick.B.onTrue(new InstantCommand(() -> RobotContainer.POSE_ESTIMATOR.resetPose(
+                new MirrorablePose2d(5, 5, new Rotation2d(), true).get()
+        )));
+        usedJoystick.A.whileTrue(SwerveCommands.runForwardByVoltage(6));//2.5
+        usedJoystick.X.whileTrue(SwerveCommands.runForwardByVoltage(12));//5
+        usedJoystick.Y.whileTrue(SwerveCommands.runForwardByVoltage(9));//3.75
+        usedJoystick.POV_RIGHT.whileTrue(SwerveCommands.runForwardByVoltage(1));//0.41
+        usedJoystick.POV_DOWN.whileTrue(SwerveCommands.runForwardByVoltage(2));//0.83
+        usedJoystick.POV_UP.whileTrue(SwerveCommands.runForwardByVoltage(3));//1.25
+        usedJoystick.POV_LEFT.whileTrue(SwerveCommands.runForwardByVoltage(0.2));//0.083
+        usedJoystick.START.whileTrue(SwerveCommands.runForwardByVoltage(0.02));//0.0083
     }
 
     private static void fourthJoystickButtons() {
