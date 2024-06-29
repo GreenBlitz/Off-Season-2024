@@ -19,8 +19,7 @@ public class SmartJoystick {
 	private Joystick joystick;
 
 	/**
-	 * This constructor constructs the joystick based on the joystick port we give
-	 * it.
+	 * This constructor constructs the joystick based on the joystick port we give it.
 	 *
 	 * @param joystick_port The port of the joystick.
 	 * @param deadzone      values if the stick below it will count as 0.
@@ -57,8 +56,7 @@ public class SmartJoystick {
 	}
 
 	/**
-	 * This constructor constructs the joystick based on the joystick port we give
-	 * it.
+	 * This constructor constructs the joystick based on the joystick port we give it.
 	 *
 	 * @param joystick_port The port of the joystick.
 	 */
@@ -138,8 +136,7 @@ public class SmartJoystick {
 	}
 
 	/**
-	 * Make the stick value be parabolic instead of linear. By that it gives easier
-	 * and soft control in low values.
+	 * Make the stick value be parabolic instead of linear. By that it gives easier and soft control in low values.
 	 *
 	 * @param axis - axis the take value from
 	 * @return the soft value
