@@ -23,8 +23,7 @@ git stash pop --quiet
 if [ "$status" = 0 ]; then
     echo "${GREEN}Static analysis succeeded. Committing changes...${RESET}"
 else
-    echo
-    echo  "${RED}Spotless check failed."
+    echo  "${RED}Spotless check failed. Cancelling commit..."
     echo        "Please fix code formatting before committing.${RESET}"
     echo "${BOLD}Help:${RESET} to autoformat all local changes, run \`./gradlew spotlessApply\`."
 fi
