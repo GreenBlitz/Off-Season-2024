@@ -101,26 +101,28 @@ public class SmartJoystick {
 	 *
 	 * @param axis The axis we want to use.
 	 * @return stick value if stick was square.
+	 * <!-- @formatter:off -->
 	 * <p>
-	 * if @ marks the 1 point of each axis:
-	 * <p>
-	 * @formatter:off
-	 *			 Before:									After:
-	 *			  (1,0)
-	 *		   *****@*******	  @ (1,1)				*************
-	 *	  *****		   *****					*****	(1,0)	 *****
-	 *	 ***				   ***				***  -------@-------@   ***
-	 *	**					   **			  **   |		  (1,1)|	**
-	 *   **						 **			**	|			   |	 **
-	 *   **						 *@ (0,1)	  **	|		  (0,1)@	 **
-	 *   **						 **			**	|			   |	 **
-	 *   **						 **			**	|			   |	 **
-	 *	**					   **			  **   |_______________|	**
-	 *	 ***				   ***				***					***
-	 *	   *****		   *****					*****			*****
-	 *		   *************							*************
-	 * @formatter:on
-	 * </p>
+	 * The `@`s represent real joystick positions, and next to them are the values returned by getAxisValue/getSquaredAxis, in the format (x,y).
+	 * (`#` means the physical joystick could never reach that position).
+	 * <pre>
+	 * getAxisValue:                        | getSquaredAxis:
+	 *              (1,0)           (1,1)   |              (1,0)
+	 *   ,----------,-@-,----------#        |              __@__
+	 *   |      , '       ' ,      |        |          , '   @   ' ,  (1,1)
+	 *   |   ,'               @,   |        |       ,'-------@-------@,
+	 *   |  '        (.71,.71)  '  |        |      ' |     (1,0)     | '
+	 *   | '                     ' |        |     '  |               |  '
+	 *   |'                       '|        |    '   |               |   '
+	 *   |                         @ (0,1)  |    |   |          (0,1)@@@@@ (0,1)
+	 *   |,                       ,|        |    ,   |               |   ,
+	 *   | ,                     , |        |     ,  |               |  ,
+	 *   |  ,                   ,  |        |      , |               | ,
+	 *   |   ',               ,'   |        |       ',---------------,'
+	 *   |      ' ,       , '      |        |          ' , _____ , '
+	 *   '----------'---'----------'        |
+	 * </pre></p>
+	 * <!-- @formatter:on -->
 	 */
 	public double getSquaredAxis(Axis axis) {
 		if (joystick == null) {
