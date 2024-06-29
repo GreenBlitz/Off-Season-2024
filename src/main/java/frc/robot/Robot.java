@@ -63,16 +63,16 @@ public class Robot extends LoggedRobot {
 
 	private void initializeLogger() {
 		switch (RobotConstants.ROBOT_TYPE) {
-		case REAL -> {
-			LoggerUtils.startRealLogger();
-		}
-		case SIMULATION -> {
-			LoggerUtils.startSimulationLogger();
-		}
-		case REPLAY -> {
-			setUseTiming(false); // Run as fast as possible
-			LoggerUtils.startReplayLogger();
-		}
+			case REAL -> {
+				LoggerUtils.startRealLogger();
+			}
+			case SIMULATION -> {
+				LoggerUtils.startSimulationLogger();
+			}
+			case REPLAY -> {
+				setUseTiming(false); // Run as fast as possible
+				LoggerUtils.startReplayLogger();
+			}
 		}
 	}
 

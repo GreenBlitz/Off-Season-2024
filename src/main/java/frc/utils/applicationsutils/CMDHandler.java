@@ -16,7 +16,7 @@ public class CMDHandler {
 	public static void runCMDCommand(String command) {
 		Runtime runtime = Runtime.getRuntime();
 		try {
-			runtime.exec(new String[] { APPLICATION, CMD_DIRECTORY, command });
+			runtime.exec(new String[] {APPLICATION, CMD_DIRECTORY, command});
 		} catch (IOException exception) {
 			System.out.println(ERROR_MESSAGE + command);// can't be logged because on computer side
 		}
