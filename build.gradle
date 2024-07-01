@@ -148,6 +148,7 @@ tasks.register('checkAkitInstall', JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
 }
 
+// Setup local git settings
 tasks.register('installLocalGitHookPostCheckout', Copy) {
     from new File(rootProject.rootDir, '.scripts/post-checkout')
     into { new File(rootProject.rootDir, '.git/hooks') }
@@ -168,6 +169,12 @@ tasks.register('installLocalGitHookPreCommit', Copy) {
     doLast {
         println("---Added Pre Commit Git Hook Script---")
     }
+}
+
+tasks.register('configLocalGitBlameIgnoreRevsFile', Exec) {
+    workingDir rootProject.rootDir
+    commandLine 'git', 'config', '--local', 'blame.ignoreRevsFile', '.git-blame-ignore-revs'
+    outputs.file('.git/config')
 }
 
 tasks.register('runComputerPrograms', JavaExec) {
@@ -201,7 +208,7 @@ tasks.register('SetConnectionTypeIP') {
 }
 
 compileJava.finalizedBy checkAkitInstall
-build.dependsOn installLocalGitHookPostCheckout, installLocalGitHookPreCommit
+build.dependsOn installLocalGitHookPostCheckout, installLocalGitHookPreCommit, configLocalGitBlameIgnoreRevsFile
 discoverroborio.finalizedBy SetConnectionTypeIP
 
 
@@ -213,10 +220,10 @@ spotless {
             include "src/main/java/frc/**/*.java"
             exclude '**/build/**', '**/build-*/**'
         }
-        indentWithSpaces(4)
         removeUnusedImports()
         trimTrailingWhitespace()
-        endWithNewline()
+        eclipse().configFile("codestyle.xml")
+        formatAnnotations()
     }
     groovyGradle {
         target fileTree(".") {

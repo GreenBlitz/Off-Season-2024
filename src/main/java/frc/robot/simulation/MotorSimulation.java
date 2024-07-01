@@ -17,68 +17,68 @@ import java.util.List;
  */
 public abstract class MotorSimulation {
 
-    private static final List<MotorSimulation> REGISTERED_SIMULATIONS = new ArrayList<>();
+	private static final List<MotorSimulation> REGISTERED_SIMULATIONS = new ArrayList<>();
 
-    private final TalonFXWrapper motor;
+	private final TalonFXWrapper motor;
 
-    private final TalonFXSimState motorSimState;
+	private final TalonFXSimState motorSimState;
 
-    private final StatusSignal<Double> closedLoopReferenceSignal;
+	private final StatusSignal<Double> closedLoopReferenceSignal;
 
-    protected MotorSimulation() {
-        REGISTERED_SIMULATIONS.add(this);
-        this.motor = new TalonFXWrapper(REGISTERED_SIMULATIONS.size());
-        this.motorSimState = motor.getSimState();
-        this.motorSimState.setSupplyVoltage(Battery.getDefaultBatteryVoltage());
-        this.closedLoopReferenceSignal = motor.getClosedLoopReference();
-        this.closedLoopReferenceSignal.setUpdateFrequency(1.0 / CycleTimeUtils.getDefaultCycleTime());
-    }
+	protected MotorSimulation() {
+		REGISTERED_SIMULATIONS.add(this);
+		this.motor = new TalonFXWrapper(REGISTERED_SIMULATIONS.size());
+		this.motorSimState = motor.getSimState();
+		this.motorSimState.setSupplyVoltage(Battery.getDefaultBatteryVoltage());
+		this.closedLoopReferenceSignal = motor.getClosedLoopReference();
+		this.closedLoopReferenceSignal.setUpdateFrequency(1.0 / CycleTimeUtils.getDefaultCycleTime());
+	}
 
-    public static void updateRegisteredSimulations() {
-        for (MotorSimulation motorSimulation : REGISTERED_SIMULATIONS) {
-            motorSimulation.updateSimulation();
-        }
-    }
+	public static void updateRegisteredSimulations() {
+		for (MotorSimulation motorSimulation : REGISTERED_SIMULATIONS) {
+			motorSimulation.updateSimulation();
+		}
+	}
 
-    private void updateSimulation() {
-        setInputVoltage(motorSimState.getMotorVoltage());
-        updateMotor();
-        motorSimState.setRawRotorPosition(getPosition().getRotations());
-        motorSimState.setRotorVelocity(getVelocity().getRotations());
-    }
+	private void updateSimulation() {
+		setInputVoltage(motorSimState.getMotorVoltage());
+		updateMotor();
+		motorSimState.setRawRotorPosition(getPosition().getRotations());
+		motorSimState.setRotorVelocity(getVelocity().getRotations());
+	}
 
-    public void applyConfiguration(TalonFXConfiguration config) {
-        motor.applyConfiguration(config);
-    }
+	public void applyConfiguration(TalonFXConfiguration config) {
+		motor.applyConfiguration(config);
+	}
 
-    public void setPower(double power) {
-        motor.set(power);
-    }
+	public void setPower(double power) {
+		motor.set(power);
+	}
 
-    public void stop() {
-        motor.stopMotor();
-    }
+	public void stop() {
+		motor.stopMotor();
+	}
 
-    public void setControl(ControlRequest request) {
-        motor.setControl(request);
-    }
+	public void setControl(ControlRequest request) {
+		motor.setControl(request);
+	}
 
-    public double getVoltage() {
-        return motor.getMotorVoltage().getValue();
-    }
+	public double getVoltage() {
+		return motor.getMotorVoltage().getValue();
+	}
 
-    public Rotation2d getProfiledSetPoint() {
-        return Rotation2d.fromRotations(closedLoopReferenceSignal.refresh().getValue());
-    }
+	public Rotation2d getProfiledSetPoint() {
+		return Rotation2d.fromRotations(closedLoopReferenceSignal.refresh().getValue());
+	}
 
-    public abstract double getCurrent();
+	public abstract double getCurrent();
 
-    protected abstract void setInputVoltage(double voltage);
+	protected abstract void setInputVoltage(double voltage);
 
-    protected abstract void updateMotor();
+	protected abstract void updateMotor();
 
-    public abstract Rotation2d getPosition();
+	public abstract Rotation2d getPosition();
 
-    public abstract Rotation2d getVelocity();
+	public abstract Rotation2d getVelocity();
 
 }
