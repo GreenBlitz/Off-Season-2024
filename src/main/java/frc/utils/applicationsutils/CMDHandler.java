@@ -1,15 +1,14 @@
 package frc.utils.applicationsutils;
 
+import frc.robot.constants.DirectoryPathsConstants;
+
 import java.nio.file.Path;
 
 public class CMDHandler {
 
-    public static final Path REPOSITORY_PATH = Path.of("").toAbsolutePath();
-    public static final Path PATH_TO_PYTHON_DIRECTORY = REPOSITORY_PATH.resolve("src/main/python");
-    public static final Path PATH_TO_JAVA_DIRECTORY = REPOSITORY_PATH.resolve("src/main/java");
-
-    private static final String WINDOWS_CMD_SPECIFICATION = "cmd.exe /c ";
-    private static final String NON_WINDOWS_CMD_SPECIFICATION = "bash -c ";
+    private static final OutputFile CMD_OUTPUT_FILE = new OutputFile("CMDHandler.txt");
+    private static final String WINDOWS_SHELL = "cmd.exe /c ";
+    private static final String NON_WINDOWS_SHELL = "bash -c ";
 
 
     public static boolean isWindows() {
@@ -21,16 +20,19 @@ public class CMDHandler {
     }
 
     public static void runCMDCommand(String command) {
-        String cmdSpecification = isWindows() ? WINDOWS_CMD_SPECIFICATION : NON_WINDOWS_CMD_SPECIFICATION;
-        Runtime runtime = Runtime.getRuntime();
-        System.out.println("Running: " + cmdSpecification + command);
+        String operatingSystemShell = isWindows() ? WINDOWS_SHELL : NON_WINDOWS_SHELL;
+        String executedCommand = operatingSystemShell + command;
+
         try {
-            runtime.exec(cmdSpecification + command);
+            CMD_OUTPUT_FILE.write("Trying To Run: " + executedCommand);
+            Runtime.getRuntime().exec(executedCommand);
         }
         catch (Exception exception) {
-            System.out.println("Unable to execute: " + command); // can't be logged because on computer side
+            CMD_OUTPUT_FILE.write("\nGot Exception: \n" + exception);
+            CMD_OUTPUT_FILE.open();
         }
     }
+
 
     public static void runJavaClass(Path javaPath) {
         runJavaClass(javaPath, "");
@@ -43,7 +45,8 @@ public class CMDHandler {
     public static void runJavaClass(Path javaPath, String arguments) {
         Path className = javaPath.getName(javaPath.getNameCount() - 1);
         Path packageName = javaPath.getParent();
-        runCMDCommand(PATH_TO_JAVA_DIRECTORY.resolve(packageName), "java " + className + ".java " + arguments);
+        String command = "java " + className + ".java " + arguments;
+        runCMDCommand(DirectoryPathsConstants.JAVA_DIRECTORY_PATH.resolve(packageName), command);
     }
 
 
@@ -72,7 +75,8 @@ public class CMDHandler {
      * @param arguments The arguments given to the python file, each argument separated by a space.
      */
     public static void runPythonClass(Path pythonPath, String arguments) {
-        runCMDCommand(PATH_TO_PYTHON_DIRECTORY, "py " + pythonPath + ".py " + arguments);
+        String command = "py " + pythonPath + ".py " + arguments;
+        runCMDCommand(DirectoryPathsConstants.PYTHON_DIRECTORY_PATH, command);
     }
 
 }
